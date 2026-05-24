@@ -1,0 +1,16 @@
+{
+  "name": "Spark Practice",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "spark-practice-dev",
+  "workspaceFolder": "/workspace/Spark_practice",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [4040, 4041],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.debugpy"
+      ]
+    }
+  }
+}

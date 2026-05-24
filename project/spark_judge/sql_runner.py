@@ -5,7 +5,7 @@ from typing import Any, Dict, List
 from spark_judge.loader import load_testcases
 from spark_judge.parser import parse_solution
 from spark_judge.validator import validate_sql
-from spark_judge.pyspark_runner import SparkSession
+from spark_judge.pyspark_runner import SparkSession, create_spark_session
 
 
 def _to_spark_df(spark, rows):
@@ -35,7 +35,7 @@ def run_solution_sql(solution_path: str, testcases: List[Dict]) -> List[Dict]:
     if SparkSession is None:
         raise RuntimeError("PySpark is not installed or failed to import")
 
-    spark = SparkSession.builder.master("local[*]").appName("local_sql_judge").getOrCreate()
+    spark = create_spark_session("local_sql_judge")
     results = []
 
     try:

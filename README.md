@@ -35,3 +35,9 @@ For SQL errors like `Syntax error at or near 'git'`, read:
 ```text
 SQL_TROUBLESHOOTING.md
 ```
+
+For Docker usage, read:
+
+```text
+DOCKER_USAGE.md
+```

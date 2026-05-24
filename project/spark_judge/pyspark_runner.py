@@ -96,6 +96,19 @@ def _from_spark_df(df: 'SparkDataFrame') -> List[Dict[str, Any]]:
     return [row.asDict() for row in df.collect()]
 
 
+def create_spark_session(app_name: str):
+    master_url = os.environ.get('SPARK_MASTER_URL', 'local[*]')
+    return (
+        SparkSession.builder
+        .master(master_url)
+        .appName(app_name)
+        .config('spark.ui.bindAddress', '0.0.0.0')
+        .config('spark.driver.bindAddress', '0.0.0.0')
+        .config('spark.driver.host', os.environ.get('SPARK_DRIVER_HOST', 'localhost'))
+        .getOrCreate()
+    )
+
+
 def run_solution_spark(solution_path: str, testcases: List[Dict]) -> List[Dict]:
     if SparkSession is None:
         raise RuntimeError('PySpark is not installed or failed to import')
@@ -111,7 +124,7 @@ def run_solution_spark(solution_path: str, testcases: List[Dict]) -> List[Dict]:
         raise RuntimeError('Solution module must define a solve(...) function')
 
     try:
-        spark = SparkSession.builder.master('local[*]').appName('local_judge').getOrCreate()
+        spark = create_spark_session('local_judge')
     except Exception as e:
         # Provide a clearer, actionable error for common Windows/Java issues
         msg = (
