@@ -14,6 +14,7 @@ from typing import List, Dict, Any
 import importlib.util
 import os
 import sys
+import time
 
 def _java_major(java_home):
     import re
@@ -109,6 +110,21 @@ def create_spark_session(app_name: str):
     )
 
 
+def keep_spark_ui_alive_if_requested():
+    seconds_text = os.environ.get('SPARK_UI_KEEP_ALIVE_SECONDS', '0')
+    try:
+        seconds = int(seconds_text)
+    except ValueError:
+        seconds = 0
+
+    if seconds <= 0:
+        return
+
+    print(f"Keeping Spark UI alive for {seconds} seconds.")
+    print("Open Spark UI at: http://localhost:4040")
+    time.sleep(seconds)
+
+
 def run_solution_spark(solution_path: str, testcases: List[Dict]) -> List[Dict]:
     if SparkSession is None:
         raise RuntimeError('PySpark is not installed or failed to import')
@@ -192,5 +208,6 @@ def run_solution_spark(solution_path: str, testcases: List[Dict]) -> List[Dict]:
 
         results.append({'input': inp, 'expected': exp_norm, 'actual': actual, 'passed': actual == exp_norm})
 
+    keep_spark_ui_alive_if_requested()
     spark.stop()
     return results

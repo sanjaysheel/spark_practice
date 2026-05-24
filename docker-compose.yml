@@ -6,15 +6,12 @@ services:
     image: spark-practice
     container_name: spark-practice-dev
     working_dir: /app/project
-    command: sleep infinity
+    command: python spark_ui_server.py
     environment:
       PYSPARK_PYTHON: python
-      SPARK_LOCAL_IP: 127.0.0.1
-      SPARK_DRIVER_HOST: localhost
       SPARK_MASTER_URL: local[*]
     ports:
-      - "4040:4040"
-      - "4041:4041"
+      - "4040-4050:4040-4050"
     volumes:
       - ./project:/app/project
       - ./:/workspace/Spark_practice

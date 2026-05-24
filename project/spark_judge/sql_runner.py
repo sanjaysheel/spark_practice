@@ -67,6 +67,9 @@ def run_solution_sql(solution_path: str, testcases: List[Dict]) -> List[Dict]:
                 }
             )
     finally:
+        from spark_judge.pyspark_runner import keep_spark_ui_alive_if_requested
+
+        keep_spark_ui_alive_if_requested()
         spark.stop()
 
     return results

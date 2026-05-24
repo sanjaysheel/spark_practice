@@ -2,14 +2,15 @@ FROM python:3.14-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ENV PYSPARK_PYTHON=python
-ENV SPARK_LOCAL_IP=127.0.0.1
+
+EXPOSE 4040-4050
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         bash \
-        openjdk-17-jre-headless \
+        openjdk-21-jre-headless \
         procps \
         tini \
     && rm -rf /var/lib/apt/lists/*
