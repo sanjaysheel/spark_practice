@@ -1,0 +1,7 @@
+{
+  "input": {
+    "products": ["mobile","mouse","moneypot","monitor","mousepad"],
+    "searchWord": "mouse"
+  },
+  "expected": [["mobile","moneypot","monitor"],["mobile","moneypot","monitor"],["mouse","mousepad"],["mouse","mousepad"],["mouse","mousepad"]]
+}

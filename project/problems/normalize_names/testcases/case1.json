@@ -1,0 +1,10 @@
+{
+  "input": [
+    {"user_id": 1, "name": "aLice"},
+    {"user_id": 2, "name": "bOB"}
+  ],
+  "expected": [
+    {"user_id": 1, "name": "Alice"},
+    {"user_id": 2, "name": "Bob"}
+  ]
+}

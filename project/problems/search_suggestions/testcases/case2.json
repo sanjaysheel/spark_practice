@@ -1,0 +1,7 @@
+{
+  "input": {
+    "products": ["havana"],
+    "searchWord": "havana"
+  },
+  "expected": [["havana"],["havana"],["havana"],["havana"],["havana"],["havana"]]
+}
