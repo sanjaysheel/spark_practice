@@ -1,0 +1,33 @@
+36. Replace NULL Values With Previous Non-NULL Value
+
+PySpark:
+
+from pyspark.sql.functions import last
+from pyspark.sql.window import Window
+
+w = Window.orderBy("id") \
+.rowsBetween(
+Window.unboundedPreceding,
+0
+)
+
+df.withColumn(
+"filled_value",
+last(
+"value",
+ignorenulls=True
+).over(w)
+)
+
+SQL:
+
+SELECT *,
+LAST_VALUE(value)
+IGNORE NULLS
+OVER(
+ORDER BY id
+ROWS BETWEEN
+UNBOUNDED PRECEDING
+AND CURRENT ROW
+)
+FROM table_name;
