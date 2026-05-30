@@ -1,0 +1,22 @@
+15. Find First and Last Transaction Per Customer
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import first,last
+
+w = Window.partitionBy("customer_id") \
+          .orderBy("txn_date")
+
+df.withColumn(
+    "first_txn",
+    first("txn_date").over(w)
+)
+
+SQL:
+
+SELECT customer_id,
+       MIN(txn_date) first_txn,
+       MAX(txn_date) last_txn
+FROM transactions
+GROUP BY customer_id;
