@@ -1,0 +1,19 @@
+20. Find Department With Highest Average Salary
+
+PySpark:
+
+from pyspark.sql.functions import avg
+
+df.groupBy("dept") \
+  .agg(avg("salary").alias("avg_sal")) \
+  .orderBy("avg_sal", ascending=False) \
+  .limit(1)
+
+SQL:
+
+SELECT dept,
+       AVG(salary) avg_sal
+FROM employee
+GROUP BY dept
+ORDER BY avg_sal DESC
+LIMIT 1;
