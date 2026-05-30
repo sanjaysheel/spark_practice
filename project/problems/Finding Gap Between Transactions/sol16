@@ -1,0 +1,29 @@
+17. Find Gap Between Transactions
+
+PySpark:
+
+from pyspark.sql.functions import lag,datediff
+
+w = Window.partitionBy("customer_id") \
+          .orderBy("txn_date")
+
+df.withColumn(
+    "prev_date",
+    lag("txn_date").over(w)
+).withColumn(
+    "days_gap",
+    datediff("txn_date","prev_date")
+)
+
+SQL:
+
+SELECT *,
+DATEDIFF(
+txn_date,
+LAG(txn_date)
+OVER(
+PARTITION BY customer_id
+ORDER BY txn_date
+)
+) days_gap
+FROM transactions;
