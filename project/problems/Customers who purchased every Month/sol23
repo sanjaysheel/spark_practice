@@ -1,0 +1,18 @@
+23. Find Customers Who Purchased Every Month
+
+PySpark:
+
+from pyspark.sql.functions import countDistinct
+
+months = 12
+
+df.groupBy("customer_id") \
+  .agg(countDistinct("month").alias("cnt")) \
+  .filter(f"cnt={months}")
+
+SQL:
+
+SELECT customer_id
+FROM sales
+GROUP BY customer_id
+HAVING COUNT(DISTINCT month)=12;
