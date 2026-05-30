@@ -1,0 +1,24 @@
+27. Generate Sequence of Dates
+
+2025-01-01 to 2025-01-10
+
+PySpark:
+
+from pyspark.sql.functions import sequence,explode
+
+spark.range(1).select(
+explode(
+sequence(
+to_date(lit("2025-01-01")),
+to_date(lit("2025-01-10"))
+)
+).alias("date")
+)
+
+SQL:
+
+SELECT generate_series(
+DATE '2025-01-01',
+DATE '2025-01-10',
+INTERVAL '1 day'
+);
