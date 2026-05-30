@@ -1,0 +1,29 @@
+3. Find Missing IDs
+Data
+
+1,2,3,5,6,9
+
+Missing → 4,7,8
+
+PySpark:
+
+from pyspark.sql.functions import col, lead
+from pyspark.sql.window import Window
+
+w = Window.orderBy("id")
+
+df.withColumn(
+    "next_id",
+    lead("id").over(w)
+).filter(col("next_id") - col("id") > 1)
+
+SQL:
+
+SELECT id+1 AS missing_start,
+       next_id-1 AS missing_end
+FROM (
+    SELECT id,
+           LEAD(id) OVER(ORDER BY id) next_id
+    FROM numbers
+) t
+WHERE next_id-id > 1;
