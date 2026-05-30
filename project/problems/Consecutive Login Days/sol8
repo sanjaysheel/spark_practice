@@ -1,0 +1,32 @@
+7. Find Consecutive Login Days
+
+Detect streaks
+
+PySpark:
+
+from pyspark.sql.functions import row_number, date_sub
+
+w = Window.partitionBy("user_id").orderBy("login_date")
+
+df2 = df.withColumn(
+    "rn",
+    row_number().over(w)
+)
+
+result = df2.withColumn(
+    "grp",
+    date_sub("login_date", df2.rn)
+)
+
+SQL:
+
+WITH cte AS (
+SELECT *,
+       ROW_NUMBER() OVER(
+       PARTITION BY user_id
+       ORDER BY login_date
+       ) rn
+FROM login_tbl
+)
+SELECT *
+FROM cte;
