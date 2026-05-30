@@ -1,0 +1,16 @@
+18. Find Median Salary
+
+PySpark:
+
+df.approxQuantile(
+    "salary",
+    [0.5],
+    0
+)
+
+SQL:
+
+SELECT PERCENTILE_CONT(0.5)
+WITHIN GROUP
+(ORDER BY salary)
+FROM employee;
