@@ -1,0 +1,15 @@
+35. Find Day With Maximum Sales
+
+PySpark:
+
+df.orderBy(
+"sales",
+ascending=False
+).limit(1)
+
+SQL:
+
+SELECT *
+FROM sales
+ORDER BY sales DESC
+LIMIT 1;
