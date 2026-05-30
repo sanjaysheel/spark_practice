@@ -1,0 +1,24 @@
+10. Unpivot Data
+
+PySpark:
+
+from pyspark.sql.functions import expr
+
+df.selectExpr(
+"employee_id",
+"stack(3,'Jan',Jan,'Feb',Feb,'Mar',Mar) as (month,sales)"
+)
+
+SQL:
+
+SELECT employee_id,
+       'Jan' month,
+       Jan sales
+FROM sales
+
+UNION ALL
+
+SELECT employee_id,
+       'Feb',
+       Feb
+FROM sales;
