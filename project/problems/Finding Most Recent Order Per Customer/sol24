@@ -1,0 +1,30 @@
+24. Find Most Recent Order Per Customer
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import row_number
+
+w = Window.partitionBy(
+    "customer_id"
+).orderBy(df.order_date.desc())
+
+df.withColumn(
+    "rn",
+    row_number().over(w)
+).filter("rn=1")
+
+SQL:
+
+WITH cte AS
+(
+SELECT *,
+ROW_NUMBER() OVER(
+PARTITION BY customer_id
+ORDER BY order_date DESC
+) rn
+FROM orders
+)
+SELECT *
+FROM cte
+WHERE rn=1;
