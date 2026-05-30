@@ -1,0 +1,25 @@
+4. Find Nth Highest Salary
+Example: 3rd Highest
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import dense_rank
+
+w = Window.orderBy(df.salary.desc())
+
+result = df.withColumn(
+    "rank",
+    dense_rank().over(w)
+).filter("rank = 3")
+
+SQL:
+
+SELECT *
+FROM (
+SELECT salary,
+       DENSE_RANK() OVER
+       (ORDER BY salary DESC) rnk
+FROM employee
+) t
+WHERE rnk = 3;
