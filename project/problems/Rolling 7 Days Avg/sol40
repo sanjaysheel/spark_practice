@@ -1,0 +1,29 @@
+40. Rolling 7-Day Average
+
+Very common analytics question
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import avg
+
+w = Window.orderBy(
+"date"
+).rowsBetween(-6,0)
+
+df.withColumn(
+"rolling_avg",
+avg("sales").over(w)
+)
+
+SQL:
+
+SELECT *,
+AVG(sales)
+OVER(
+ORDER BY date
+ROWS BETWEEN
+6 PRECEDING
+AND CURRENT ROW
+)
+FROM sales;
