@@ -1,0 +1,20 @@
+32. Find Product Generating Maximum Revenue
+
+PySpark:
+
+from pyspark.sql.functions import sum
+
+df.groupBy("product_id") \
+  .agg(sum("amount").alias("revenue")) \
+  .orderBy("revenue",
+           ascending=False) \
+  .limit(1)
+
+SQL:
+
+SELECT product_id,
+SUM(amount) revenue
+FROM sales
+GROUP BY product_id
+ORDER BY revenue DESC
+LIMIT 1;
