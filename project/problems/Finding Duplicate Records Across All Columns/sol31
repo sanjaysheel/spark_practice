@@ -1,0 +1,15 @@
+31. Identify Duplicate Records Across All Columns
+
+PySpark:
+
+df.groupBy(df.columns) \
+  .count() \
+  .filter("count > 1")
+
+SQL:
+
+SELECT *,
+COUNT(*)
+FROM employee
+GROUP BY col1,col2,col3
+HAVING COUNT(*) > 1;
