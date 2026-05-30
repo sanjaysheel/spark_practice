@@ -1,0 +1,19 @@
+6. Running Total
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import sum
+
+w = Window.orderBy("id")
+
+df.withColumn(
+    "running_total",
+    sum("salary").over(w)
+
+SQL:
+
+SELECT *,
+       SUM(salary) OVER
+       (ORDER BY id) running_total
+FROM employee;
