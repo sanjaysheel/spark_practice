@@ -1,0 +1,31 @@
+5. Deduplicate and Keep Latest Record
+Based on updated_date
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import row_number
+
+w = Window.partitionBy("id").orderBy(
+    df.updated_date.desc()
+)
+
+result = df.withColumn(
+    "rn",
+    row_number().over(w)
+).filter("rn = 1")
+
+SQL:
+
+WITH cte AS (
+SELECT *,
+       ROW_NUMBER() OVER
+       (
+       PARTITION BY id
+       ORDER BY updated_date DESC
+       ) rn
+FROM employee
+)
+SELECT *
+FROM cte
+WHERE rn=1;
