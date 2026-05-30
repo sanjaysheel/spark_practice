@@ -1,0 +1,19 @@
+14. Calculate Percentage Contribution
+
+PySpark:
+
+from pyspark.sql.functions import sum
+
+total = df.agg(sum("sales")).collect()[0][0]
+
+df.withColumn(
+    "percentage",
+    (df.sales/total)*100
+)
+
+SQL:
+
+SELECT *,
+       sales*100.0/
+       SUM(sales) OVER() pct
+FROM sales_tbl;
