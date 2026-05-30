@@ -1,0 +1,36 @@
+39. Sessionization Problem
+
+New Session if inactivity > 30 minutes
+
+PySpark:
+
+from pyspark.sql.functions import lag
+
+w = Window.partitionBy(
+"user_id"
+).orderBy("event_time")
+
+df = df.withColumn(
+"prev_time",
+lag("event_time").over(w)
+)
+
+Calculate:
+
+event_time - prev_time > 30 min
+
+SQL:
+
+SELECT *,
+CASE
+WHEN event_time -
+LAG(event_time)
+OVER(
+PARTITION BY user_id
+ORDER BY event_time
+)
+> INTERVAL '30 MINUTES'
+THEN 1
+ELSE 0
+END
+FROM events;
