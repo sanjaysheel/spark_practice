@@ -1,0 +1,24 @@
+34. Rank Products by Sales Within Category
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import dense_rank
+
+w = Window.partitionBy(
+"category"
+).orderBy(df.sales.desc())
+
+df.withColumn(
+"rank",
+dense_rank().over(w)
+)
+
+SQL:
+
+SELECT *,
+DENSE_RANK() OVER(
+PARTITION BY category
+ORDER BY sales DESC
+) rank
+FROM products;
