@@ -1,0 +1,29 @@
+29. Convert Rows Into Comma-Separated List
+
+Example
+1
+2
+3
+
+Output
+
+1,2,3
+
+PySpark:
+
+from pyspark.sql.functions import collect_list,concat_ws
+
+df.agg(
+concat_ws(
+',',
+collect_list("id")
+).alias("ids")
+)
+
+SQL:
+
+SELECT STRING_AGG(
+CAST(id AS VARCHAR),
+','
+)
+FROM table_name;
