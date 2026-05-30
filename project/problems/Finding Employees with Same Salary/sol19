@@ -1,0 +1,27 @@
+19. Find Employees Having Same Salary
+Input
+emp_id	salary
+1	      10000
+2	      15000
+3	      10000
+
+PySpark:
+
+from pyspark.sql.functions import count
+
+dup_sal = df.groupBy("salary") \
+            .agg(count("*").alias("cnt")) \
+            .filter("cnt > 1")
+
+result = df.join(dup_sal, "salary")
+
+SQL:
+
+SELECT *
+FROM employee
+WHERE salary IN (
+    SELECT salary
+    FROM employee
+    GROUP BY salary
+    HAVING COUNT(*) > 1
+);
