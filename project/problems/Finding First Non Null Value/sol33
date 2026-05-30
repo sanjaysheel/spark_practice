@@ -1,0 +1,24 @@
+33. Find First Non-Null Value
+
+PySpark:
+
+from pyspark.sql.functions import first
+
+df.groupBy("customer_id") \
+  .agg(
+      first(
+      "email",
+      ignorenulls=True
+      )
+  )
+
+SQL:
+
+SELECT customer_id,
+FIRST_VALUE(email)
+IGNORE NULLS
+OVER(
+PARTITION BY customer_id
+ORDER BY update_date
+)
+FROM customer;
