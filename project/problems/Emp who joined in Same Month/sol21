@@ -1,0 +1,20 @@
+21. Find Employees Who Joined in the Same Month
+
+PySpark:
+
+from pyspark.sql.functions import month,count
+
+df.withColumn(
+    "join_month",
+    month("joining_date")
+).groupBy("join_month") \
+ .agg(count("*").alias("cnt")) \
+ .filter("cnt > 1")
+
+SQL:
+
+SELECT MONTH(joining_date),
+       COUNT(*)
+FROM employee
+GROUP BY MONTH(joining_date)
+HAVING COUNT(*) > 1;
