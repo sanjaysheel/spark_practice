@@ -1,0 +1,18 @@
+12. Find Duplicate Records
+
+PySpark:
+
+from pyspark.sql.functions import count
+
+df.groupBy("id") \
+  .agg(count("*").alias("cnt")) \
+  .filter("cnt > 1")
+
+
+SQL:
+
+SELECT id,
+       COUNT(*)
+FROM employee
+GROUP BY id
+HAVING COUNT(*) > 1;
