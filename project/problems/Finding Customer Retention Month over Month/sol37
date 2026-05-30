@@ -1,0 +1,22 @@
+37. Find Customer Retention Month-over-Month
+
+Common Product Company Question
+
+Customers active in both Month-1 and Month-2.
+
+PySpark:
+
+m1 = df.filter("month='2025-01'")
+m2 = df.filter("month='2025-02'")
+
+retained = m1.join(
+m2,
+"customer_id"
+)
+
+SQL:
+
+SELECT DISTINCT a.customer_id
+FROM jan_sales a
+JOIN feb_sales b
+ON a.customer_id=b.customer_id;
