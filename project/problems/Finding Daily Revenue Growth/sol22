@@ -1,0 +1,34 @@
+22. Find Daily Revenue Growth %
+
+Formula:
+(Current Day Revenue - Previous Day Revenue)
+/ Previous Day Revenue * 100
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import lag
+
+w = Window.orderBy("sales_date")
+
+df = df.withColumn(
+    "prev_revenue",
+    lag("revenue").over(w)
+)
+
+df = df.withColumn(
+    "growth_pct",
+    ((df.revenue-df.prev_revenue)
+      /df.prev_revenue)*100
+)
+
+SQL:
+
+SELECT *,
+(
+(revenue -
+LAG(revenue) OVER(ORDER BY sales_date))
+/
+LAG(revenue) OVER(ORDER BY sales_date)
+)*100 growth_pct
+FROM sales;
