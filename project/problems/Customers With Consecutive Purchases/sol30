@@ -1,0 +1,42 @@
+30. Find Customers With Consecutive Purchases
+
+Example
+
+Purchased on:
+
+2025-01-01
+2025-01-02
+2025-01-03
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import lag,datediff
+
+w = Window.partitionBy(
+"customer_id"
+).orderBy("purchase_date")
+
+df.withColumn(
+"prev_date",
+lag("purchase_date").over(w)
+).withColumn(
+"diff",
+datediff(
+"purchase_date",
+"prev_date"
+)
+)
+
+SQL:
+
+SELECT *,
+DATEDIFF(
+purchase_date,
+LAG(purchase_date)
+OVER(
+PARTITION BY customer_id
+ORDER BY purchase_date
+)
+)
+FROM sales;
