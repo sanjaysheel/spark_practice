@@ -1,0 +1,26 @@
+9. Pivot Data
+
+Input:
+
+Month	Sales
+Jan	  100
+Feb	  200
+
+Output:
+
+Jan	Feb
+100	200
+
+PySpark:
+
+df.groupBy().pivot("month").sum("sales")
+
+SQL:
+
+SELECT
+SUM(CASE WHEN month='Jan'
+THEN sales END) Jan,
+
+SUM(CASE WHEN month='Feb'
+THEN sales END) Feb
+FROM sales;
