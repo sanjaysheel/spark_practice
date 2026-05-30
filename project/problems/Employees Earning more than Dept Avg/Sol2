@@ -1,0 +1,24 @@
+2. Find Employees Earning More Than Department Average
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import avg
+
+w = Window.partitionBy("dept")
+
+result = df.withColumn(
+    "avg_sal",
+    avg("salary").over(w)
+).filter("salary > avg_sal")
+
+SQL:
+
+SELECT *
+FROM (
+    SELECT *,
+           AVG(salary) OVER
+           (PARTITION BY dept) avg_sal
+    FROM employee
+) t
+WHERE salary > avg_sal;
