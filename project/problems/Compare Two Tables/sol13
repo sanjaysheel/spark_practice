@@ -1,0 +1,21 @@
+13. Compare Two Tables
+
+Find records in A not in B
+
+PySpark:
+
+tableA.join(
+    tableB,
+    "id",
+    "left_anti"
+)
+
+SQL:
+
+SELECT *
+FROM tableA
+
+EXCEPT
+
+SELECT *
+FROM tableB;
