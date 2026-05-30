@@ -1,0 +1,18 @@
+25. Count NULL Values Per Column
+
+PySpark:
+
+from pyspark.sql.functions import col,sum
+
+df.select([
+sum(col(c).isNull().cast("int"))
+.alias(c)
+for c in df.columns
+])
+
+SQL:
+
+SELECT
+SUM(CASE WHEN col1 IS NULL THEN 1 END) col1_nulls,
+SUM(CASE WHEN col2 IS NULL THEN 1 END) col2_nulls
+FROM table_name;
