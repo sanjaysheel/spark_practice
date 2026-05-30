@@ -1,0 +1,31 @@
+1. Find Employees With Highest Salary in Each Department
+Sample Data
+emp_id	dept	salary
+1	       IT	10000
+2	       IT	15000
+3	HR	12000
+4	HR	18000
+
+PySpark:
+
+from pyspark.sql.window import Window
+from pyspark.sql.functions import dense_rank
+
+w = Window.partitionBy("dept").orderBy(df.salary.desc())
+
+result = df.withColumn(
+    "rank",
+    dense_rank().over(w)
+).filter("rank = 1")
+
+SQL:
+
+WITH cte AS (
+SELECT *,
+       DENSE_RANK() OVER
+       (PARTITION BY dept ORDER BY salary DESC) rnk
+FROM employee
+)
+SELECT *
+FROM cte
+WHERE rnk = 1;
