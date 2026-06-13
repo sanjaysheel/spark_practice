@@ -55,7 +55,16 @@ def run_solution_sql(solution_path: str, testcases: List[Dict]) -> List[Dict]:
                 actual = _normalize_nulls(actual)
                 passed = actual == expected
             except Exception as exc:
-                actual = f"<error: {exc}>"
+                error_msg = str(exc)
+                # Check for common subscript error and provide helpful message
+                if "'SparkSession' object is not subscriptable" in error_msg:
+                    error_msg = (
+                        "'SparkSession' object is not subscriptable. "
+                        "Your SQL solution may have a Python syntax error. "
+                        "Ensure your .sql file contains only SQL (no Python code), "
+                        "or use the Python runner for Python+PySpark solutions."
+                    )
+                actual = f"<error: {error_msg}>"
                 passed = False
 
             results.append(

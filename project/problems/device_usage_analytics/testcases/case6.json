@@ -1,0 +1,24 @@
+Input:
+
+
+users Table:
+
++---------+--------+------------------+
+| user_id | name   | email            |
++---------+--------+------------------+
+| 1       | User_1 | john@example.com |
+| 2       | User_2 | jane@example.com |
+| 3       | User_3 | bob@example.com  |
+| 4       | User_4 | john@example.com |
+| 5       | User_5 | jane@example.com |
++---------+--------+------------------+
+
+Output:
+
++------------------+------------------+
+| email            | occurrence_count |
++------------------+------------------+
+| bob@example.com  | 1                |
+| jane@example.com | 2                |
+| john@example.com | 2                |
++------------------+------------------+

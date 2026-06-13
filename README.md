@@ -41,3 +41,10 @@ For Docker usage, read:
 ```text
 DOCKER_USAGE.md
 ```
+
+Docker has two modes:
+
+```text
+docker-compose.image.yml  # image-only, no local code mount
+docker-compose.yml        # dev mode, mounts local project folder
+```

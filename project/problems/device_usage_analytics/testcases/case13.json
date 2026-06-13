@@ -1,0 +1,43 @@
+Input:
+
+
+city Table:
+
++----+-------------+--------------+-------------+------------+
+| id | name        | country_code | district    | population |
++----+-------------+--------------+-------------+------------+
+| 1  | City_1      | USA          | California  | 150000     |
+| 2  | City_2      | USA          | California  | 180000     |
+| 3  | City_3      | USA          | Texas       | 220000     |
+| 4  | City_4      | USA          | Texas       | 130000     |
+| 5  | City_5      | USA          | Florida     | 175000     |
+| 6  | City_6      | USA          | Florida     | 190000     |
+| 7  | City_7      | USA          | New York    | 210000     |
+| 8  | City_8      | USA          | New York    | 140000     |
+| 9  | City_9      | USA          | Ohio        | 160000     |
+| 10 | City_10     | USA          | Ohio        | 125000     |
+| 11 | City_11     | USA          | Nevada      | 155000     |
+| 12 | City_12     | USA          | Nevada      | 240000     |
+| 13 | City_13     | USA          | Arizona     | 300000     |
+| 14 | City_14     | USA          | Arizona     | 170000     |
+| 15 | City_15     | USA          | Oregon      | 145000     |
+| 16 | City_16     | USA          | Oregon      | 115000     |
+| 17 | City_17     | USA          | Washington  | 195000     |
+| 18 | City_18     | USA          | Washington  | 250000     |
+| 19 | City_19     | USA          | Colorado    | 165000     |
+| 20 | City_20     | USA          | Colorado    | 120000     |
+| 21 | City_21     | USA          | Utah        | 205000     |
+| 22 | City_22     | USA          | Utah        | 135000     |
+| 23 | City_23     | USA          | Georgia     | 155000     |
+| 24 | City_24     | USA          | Georgia     | 180000     |
+| 25 | City_25     | USA          | Illinois    | 275000     |
++----+-------------+--------------+-------------+------------+
+
+
+Output:
+
++------------+
+| city_count |
++------------+
+| 25         |
++------------+

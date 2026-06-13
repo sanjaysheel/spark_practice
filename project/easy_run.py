@@ -99,6 +99,112 @@ def _looks_like_spark_solution(solution_path):
     return "def solve(spark" in text or "pyspark" in text
 
 
+def _format_table(data):
+    """Format list of dicts as a simple table."""
+    if not data or not isinstance(data, list):
+        return str(data)
+    
+    if not isinstance(data[0], dict):
+        return str(data)
+    
+    # Get all keys from all rows
+    keys = []
+    for row in data:
+        for key in row.keys():
+            if key not in keys:
+                keys.append(key)
+    
+    if not keys:
+        return "[]"
+    
+    # Calculate column widths
+    col_widths = {}
+    for key in keys:
+        col_widths[key] = len(str(key))
+        for row in data:
+            col_widths[key] = max(col_widths[key], len(str(row.get(key, ""))))
+    
+    # Build table
+    lines = []
+    
+    # Header
+    header = " | ".join(str(key).ljust(col_widths[key]) for key in keys)
+    lines.append(header)
+    lines.append("-" * len(header))
+    
+    # Rows
+    for row in data:
+        row_str = " | ".join(str(row.get(key, "")).ljust(col_widths[key]) for key in keys)
+        lines.append(row_str)
+    
+    return "\n".join(lines)
+
+
+def _show_differences(expected, actual):
+    """Show detailed differences between expected and actual output."""
+    if not isinstance(expected, list) or not isinstance(actual, list):
+        return
+    
+    if len(expected) != len(actual):
+        print(f"  ⚠️  Row count mismatch: Expected {len(expected)} rows, got {len(actual)} rows")
+        return
+    
+    # Check each row
+    for i, (exp_row, act_row) in enumerate(zip(expected, actual)):
+        if exp_row != act_row:
+            print(f"  ⚠️  Row {i} differs:")
+            
+            # Get all keys
+            all_keys = set(exp_row.keys()) | set(act_row.keys())
+            
+            for key in sorted(all_keys):
+                exp_val = exp_row.get(key)
+                act_val = act_row.get(key)
+                
+                if exp_val != act_val:
+                    exp_type = type(exp_val).__name__
+                    act_type = type(act_val).__name__
+                    print(f"      {key}:")
+                    print(f"        Expected: {repr(exp_val)} ({exp_type})")
+                    print(f"        Got:      {repr(act_val)} ({act_type})")
+
+
+def _print_results(results):
+    """Format and print test results clearly."""
+    for i, result in enumerate(results, 1):
+        passed = result["passed"]
+        status = "✓ PASSED" if passed else "✗ FAILED"
+        
+        print(f"\nTest Case {i}: {status}")
+        
+        if not passed:
+            actual = result.get("actual")
+            if isinstance(actual, str) and actual.startswith("<error:"):
+                # Extract and highlight the error message
+                error_msg = actual[8:-1] if actual.endswith(">") else actual[8:]
+                print(f"  ERROR: {error_msg}")
+                # Still show expected output even on error
+                expected = result.get('expected')
+                if expected is not None:
+                    print(f"\n  Expected Output:")
+                    print(_format_table(expected))
+            else:
+                print(f"  Your Output:")
+                print(_format_table(actual))
+                print(f"\n  Expected:")
+                print(_format_table(result.get('expected')))
+                print(f"\n  Differences:")
+                _show_differences(result.get('expected'), actual)
+        else:
+            # Show expected and actual output tables for passed tests
+            expected = result.get("expected")
+            actual = result.get("actual")
+            print(f"  Expected Output:")
+            print(_format_table(expected))
+            print(f"\n  Actual Output:")
+            print(_format_table(actual))
+
+
 def _run(solution_path, problem_name, testcases):
     suffix = solution_path.suffix.lower()
     if suffix == ".sql":
@@ -116,12 +222,25 @@ def _run(solution_path, problem_name, testcases):
         results = run_solution(str(solution_path), testcases)
 
     passed = sum(1 for result in results if result["passed"])
+    print(f"\n{'='*60}")
     print(f"Mode: {mode}")
     print(f"Problem: {problem_name}")
     print(f"Solution: {solution_path}")
-    print(f"{passed}/{len(results)} tests passed")
-    for result in results:
-        print(result)
+    print(f"Result: {passed}/{len(results)} tests passed")
+    
+    if mode == "pyspark" and results:
+        app_id = results[0].get('app_id')
+        if app_id:
+            print(f"Spark UI: http://localhost:4040")
+            print(f"App ID: {app_id}")
+            print(f"Exact Job Links:")
+            for i, result in enumerate(results, 1):
+                case_idx = result.get('case_idx', i-1)
+                job_id = case_idx
+                print(f"  Test Case {i}: http://localhost:4040/jobs/job/?id={job_id}")
+    print(f"{'='*60}")
+    
+    _print_results(results)
 
 
 def main():

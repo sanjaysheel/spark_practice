@@ -2,7 +2,78 @@
 
 This Docker setup runs the same project without changing your local code, Python, Java, or Spark installation.
 
-Recommended use:
+There are two ways to use Docker here:
+
+- image-only mode: everything is copied into the image during build
+- dev mode: your local folder is mounted into the container for live editing
+
+Use image-only mode when you want the container to run without taking code from your local folder.
+
+Use dev mode when you want local edits to appear immediately inside Docker.
+
+## Image-Only Mode
+
+This mode does not mount local code. Everything comes from the built Docker image.
+
+Build the image:
+
+```powershell
+cd A:\Spark_practice
+docker build -t spark-practice .
+```
+
+Run a normal Python solution:
+
+```powershell
+docker run --rm spark-practice python easy_run.py solution1.py --problem nth_highest_salary --testcase case1.json
+```
+
+Run a PySpark solution:
+
+```powershell
+docker run --rm -p 4040-4050:4040-4050 spark-practice python easy_run.py solution_join_spark_simple.py --testcase case_join.json
+```
+
+Run a SQL solution:
+
+```powershell
+docker run --rm -p 4040-4050:4040-4050 spark-practice python easy_run.py solution_join.sql --problem Second_Highest_Sal
+```
+
+Start image-only container with always-on Spark UI:
+
+```powershell
+docker compose -f docker-compose.image.yml up -d --build
+```
+
+Open shell inside image-only container:
+
+```powershell
+docker exec -it spark-practice-image bash
+```
+
+Inside container:
+
+```bash
+cd /app/project
+python easy_run.py solution_join.sql --problem Second_Highest_Sal
+```
+
+Stop image-only container:
+
+```powershell
+docker compose -f docker-compose.image.yml down
+```
+
+Important: if you change local files, rebuild the image:
+
+```powershell
+docker build -t spark-practice .
+```
+
+## Dev Mode With Local Mount
+
+Recommended for active coding:
 
 - mount your local `A:\Spark_practice\project` folder into the container
 - publish Spark UI ports `4040-4050`

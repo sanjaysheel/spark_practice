@@ -1,0 +1,34 @@
+Input:
+
+
+city Table:
+
++----+----------+--------------+------------+
+| id | name     | country_code | population |
++----+----------+--------------+------------+
+| 1  | Tokyo    | JPN          | 37393128   |
+| 2  | Delhi    | IND          | 32941000   |
+| 3  | Shanghai | CHN          | 27058000   |
+| 4  | Mumbai   | IND          | 16368000   |
+| 5  | Beijing  | CHN          | 14250000   |
++----+----------+--------------+------------+
+
+country Table:
+
++------+------------+-----------+
+| code | name       | continent |
++------+------------+-----------+
+| JPN  | Japan      | Asia      |
+| IND  | India      | Asia      |
+| CHN  | China      | Asia      |
+| BGD  | Bangladesh | Asia      |
+| PAK  | Pakistan   | Asia      |
++------+------------+-----------+
+
+Output:
+
++------------------+
+| total_population |
++------------------+
+| 128010128        |
++------------------+

@@ -1,0 +1,14 @@
+services:
+  spark-practice-image:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: spark-practice
+    container_name: spark-practice-image
+    working_dir: /app/project
+    command: python spark_ui_server.py
+    environment:
+      PYSPARK_PYTHON: python
+      SPARK_MASTER_URL: local[*]
+    ports:
+      - "4040-4050:4040-4050"

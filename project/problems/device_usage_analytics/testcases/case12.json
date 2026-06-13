@@ -1,0 +1,28 @@
+Input:
+
+
+city Table:
+
++----+---------------+--------------+------------+------------+
+| id | name          | country_code | district   | population |
++----+---------------+--------------+------------+------------+
+| 1  | Los Angeles   | USA          | California | 3000000    |
+| 2  | San Diego     | USA          | California | 2000000    |
+| 3  | San Jose      | USA          | California | 1000000    |
+| 4  | San Francisco | USA          | California | 1024000    |
+| 5  | Houston       | USA          | Texas      | 2300000    |
+| 6  | Dallas        | USA          | Texas      | 1300000    |
+| 7  | Austin        | USA          | Texas      | 950000     |
+| 8  | Miami         | USA          | Florida    | 450000     |
+| 9  | Orlando       | USA          | Florida    | 310000     |
+| 10 | New York City | USA          | New York   | 8400000    |
++----+---------------+--------------+------------+------------+
+
+
+Output:
+
++------------------+
+| total_population |
++------------------+
+| 7024000          |
++------------------+

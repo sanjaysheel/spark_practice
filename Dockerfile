@@ -10,10 +10,20 @@ EXPOSE 4040-4050
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         bash \
-        openjdk-21-jre-headless \
+        ca-certificates \
+        curl \
+        wget \
+        git \
+        build-essential \
+        gcc \
+        g++ \
+        make \
+        default-jdk \
+        maven \
         procps \
         tini \
     && rm -rf /var/lib/apt/lists/*
+
 
 WORKDIR /app/project
 

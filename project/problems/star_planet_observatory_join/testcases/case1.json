@@ -1,0 +1,29 @@
+Input: 
+so_planet table:
++----+----------+---------+-------------+----------+
+| id | name     | star_id | type        | distance |
++----+----------+---------+-------------+----------+
+| 1  | Mercury  | 1       | Terrestrial | 0.39     |
+| 2  | Venus    | 1       | Terrestrial | 0.72     |
+| 3  | Mars     | 1       | Terrestrial | 1.52     |
+| 4  | Sirius B | 2       | Gas Giant   | 20.0     |
++----+----------+---------+-------------+----------+
+so_star Table:
+
++----+--------+--------+--------------------+----------+
+| id | name   | color  | type               | distance |
++----+--------+--------+--------------------+----------+
+| 1  | Sun    | Yellow | Dwarf              | 0.0      |
+| 2  | Sirius | Blue   | Main Sequence Star | 8.6      |
+| 3  | Vega   | Blue   | Main Sequence Star | 25.0     |
++----+--------+--------+--------------------+----------+
+
+Output:
++-----------+------------+--------------------+-------------+-------------+---------------------+----------------------+
+| star_name | star_color | star_type          | planet_name | planet_type | distance_star_earth | distance_planet_star |
++-----------+------------+--------------------+-------------+-------------+---------------------+----------------------+
+| Sun       | Yellow     | Dwarf              | Mercury     | Terrestrial | 0.0                 | 0.39                 |
+| Sun       | Yellow     | Dwarf              | Venus       | Terrestrial | 0.0                 | 0.72                 |
+| Sun       | Yellow     | Dwarf              | Mars        | Terrestrial | 0.0                 | 1.52                 |
+| Sirius    | Blue       | Main Sequence Star | Sirius B    | Gas Giant   | 8.6                 | 20.0                 |
++-----------+------------+--------------------+-------------+-------------+---------------------+----------------------+

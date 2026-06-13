@@ -125,6 +125,33 @@ def keep_spark_ui_alive_if_requested():
     time.sleep(seconds)
 
 
+def _extract_spark_error_message(error):
+    """Extract the essential error message from a Spark exception."""
+    error_str = str(error)
+    lines = error_str.split('\n')
+    
+    # Try to find the main error message (usually in the first few lines)
+    for i, line in enumerate(lines):
+        if '[' in line and ']' in line:
+            # Extract error code and message (e.g., "[DATATYPE_MISMATCH.BINARY_OP_WRONG_TYPE]")
+            start = line.find('[')
+            end = line.find(']', start)
+            if start != -1 and end != -1:
+                error_code = line[start:end+1]
+                # Get the message after the error code
+                msg_part = line[end+1:].strip()
+                if msg_part:
+                    return f"{error_code} {msg_part}"
+    
+    # Fallback: return first non-empty line
+    for line in lines:
+        stripped = line.strip()
+        if stripped and not stripped.startswith('at '):
+            return stripped
+    
+    return error_str[:200] if error_str else "Unknown error"
+
+
 def run_solution_spark(solution_path: str, testcases: List[Dict]) -> List[Dict]:
     if SparkSession is None:
         raise RuntimeError('PySpark is not installed or failed to import')
@@ -159,8 +186,11 @@ def run_solution_spark(solution_path: str, testcases: List[Dict]) -> List[Dict]:
         )
         raise RuntimeError(msg)
 
+    # Get app ID for Spark UI link
+    app_id = spark.sparkContext.applicationId
+    
     results = []
-    for case in testcases:
+    for case_idx, case in enumerate(testcases):
         inp = case.get('input')
         expected = case.get('expected')
 
@@ -192,7 +222,16 @@ def run_solution_spark(solution_path: str, testcases: List[Dict]) -> List[Dict]:
             except TypeError:
                 actual_raw = module.solve(spark_inputs, spark)
         except Exception as e:
-            results.append({'input': inp, 'expected': expected, 'actual': f'<error: {e}>', 'passed': False})
+            error_msg = _extract_spark_error_message(e)
+            # Check for common subscript error and provide helpful message
+            if "'SparkSession' object is not subscriptable" in str(e):
+                error_msg = (
+                    "'SparkSession' object is not subscriptable. "
+                    "Your solve() function is trying to use spark[...] or treating the first parameter like a dict. "
+                    "Correct usage: def solve(spark, inputs): where inputs is a dict of DataFrames, "
+                    "and you access them with inputs['table_name'], not spark['table_name']."
+                )
+            results.append({'input': inp, 'expected': expected, 'actual': f'<error: {error_msg}>', 'passed': False, 'app_id': app_id, 'case_idx': case_idx})
             continue
 
         # Normalize actual result: DataFrame -> list-of-dicts
@@ -206,7 +245,7 @@ def run_solution_spark(solution_path: str, testcases: List[Dict]) -> List[Dict]:
         if isinstance(expected, list):
             exp_norm = expected
 
-        results.append({'input': inp, 'expected': exp_norm, 'actual': actual, 'passed': actual == exp_norm})
+        results.append({'input': inp, 'expected': exp_norm, 'actual': actual, 'passed': actual == exp_norm, 'app_id': app_id, 'case_idx': case_idx})
 
     keep_spark_ui_alive_if_requested()
     spark.stop()
